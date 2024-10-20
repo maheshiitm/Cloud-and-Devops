@@ -1,0 +1,27 @@
+
+To install PHP on Amazon Linux 2, you can use the following commands:
+
+Update the package repository: sudo yum update -y
+
+Install PHP and necessary PHP modules: sudo yum install php php-mysqlnd -y
+
+Verify the PHP installation: php -v
+
+Start the PHP-FPM service (if required): sudo systemctl start php-fpm
+Showing error so below use the commands 
+
+The error message "Unit not found" indicates that the php-fpm service is not installed on your system. To resolve this issue and start the PHP-FPM service on Amazon Linux 2, you can follow these steps to install and start the service:
+
+Install PHP-FPM: sudo yum install php-fpm -y
+
+Once PHP-FPM is installed, start the service using the following command: sudo systemctl start php-fpm
+
+Enable the PHP-FPM service to start on boot: sudo systemctl enable php-fpm
+
+After running these commands, PHP-FPM should start successfully, and you should be able to manage the PHP-FPM service on your Amazon Linux 2 instance
+
+
+
+Enable the PHP-FPM service to start on boot: sudo systemctl enable php-fpm
+
+These commands will help you install PHP on Amazon Linux 2. After installation, you can configure PHP settings and start using PHP for your web applications. Let me know if you need any further assistance.
