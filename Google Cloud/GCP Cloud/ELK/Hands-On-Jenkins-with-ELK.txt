@@ -1,0 +1,66 @@
+==================================================== Jenkins Installation on Ubuntu 18.04 ==========================================================================================================
+
+$ wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+$ sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+$ sudo apt update
+$ sudo apt install jenkins
+
+==================================================== Starting Jenkins ==========================================================================================================
+
+$ sudo systemctl start jenkins
+$ sudo systemctl status jenkins
+
+==================================================== Opening the Firewall =======================================================================================================
+
+$ sudo ufw allow 8080
+$ sudo ufw status
+
+==================================================== Jenkins Web UI ==============================================================================================================
+
+Enter the following address in your webbrowser (Public IP if hosted on AWS, VM Local IP if hosted as a virtual machine, localhost if hosted on native Ubuntu OS):
+
+http://your_server_ip_or_domain:8080  
+
+==================================================== Jenkins Default Password =====================================================================================================
+
+$ sudo vi /var/lib/jenkins/secrets/initialAdminPassword
+
+Copy the password from the text editor
+
+==================================================== Edit filebeat.yml for Jenkins =================================================================================================
+
+$ cd /etc/filebeat
+$ sudo vi filebeat.yml
+
+1.  enabled: true
+2.  paths:
+	- /var/log/jenkins/jenkins.log
+	- /var/lib/jenkins/jobs/*/builds/*/log
+
+3. setup.dashboards.enabled: true
+4. host: "http://ip_address:5601"
+5. hosts: ["http://ip_address:9200"]
+6.
+	logging.level: info
+	logging.to_files: true
+	logging.files:
+	  path: /var/log/filebeat
+	  name: filebeat
+	  keepfiles: 5
+	  permissions: 0644
+
+Save and Exit
+
+======================================================== Test the config =========================================================
+
+$ cd /usr/share/filebeat/bin
+$ sudo ./filebeat test config -e -c /etc/filebeat/filebeat.yml
+
+======================================================== Setup Dashboard ========================================================
+
+$ cd /usr/share/filebeat/bin
+$ sudo filebeat setup --dashboards -E setup.dashboard.kibana_index=filebeat-*
+
+
+
+
