@@ -1,0 +1,100 @@
+Parameters:
+  AMI:
+    Type: String
+    Description: "Provide the AMI Id to create Instances using that particular AMI.
+    You can copy the AMI Id from EC2 Launch Instance Console for an AMI and provide it here."
+  Key:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: "Select a key pair from existing key pairs."
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.10.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: "Name"
+          Value: "Aniket-CF-VPC"
+  
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: "Name"
+          Value: "Aniket-CF-VPC-IGW"
+  
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+  
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.10.1.0/24
+      VpcId: !Ref VPC
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: "Name"
+          Value: "Aniket-CF-VPC-Public-Subnet"
+  
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "Aniket-CF-VPC-PublicRouteTable"
+  
+  SpecifiedPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      GatewayId: !Ref InternetGateway
+      DestinationCidrBlock: 0.0.0.0/0
+      RouteTableId: !Ref PublicRouteTable
+  
+  PublicSubnetAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet
+
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: "Aniket-VPC-CF-Sg"
+      VpcId: !Ref VPC 
+      GroupDescription: "Security Group for VPC Created Using Cloudformation."
+      SecurityGroupIngress:
+        - IpProtocol: '-1'
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: '-1'
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: "Name"
+          Value: "Aniket-VPC-CF-Sg"
+
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref AMI
+      KeyName: !Ref Key
+      InstanceType: t2.micro
+      SubnetId: !Ref PublicSubnet
+      SecurityGroupIds: 
+        - !Ref EC2SecurityGroup
+
+      Tags:
+        - Key: "Name"
+          Value: "Aniket-CF-EC2"    
+
+Outputs:
+  VPC:
+    Description: "Descrition of the VPC created."
+    Value: !Ref VPC
+
+

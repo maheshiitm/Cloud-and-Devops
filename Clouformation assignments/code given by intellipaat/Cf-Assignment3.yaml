@@ -1,0 +1,27 @@
+Parameters:
+  S3BucketName:
+    Type: String
+    Description: "Provide a name for your S3 Bucket."
+    ConstraintDescription: "Bucket name must be globally unique and must not contain spaces or uppercase letters"
+    AllowedPattern: ^[a-z0-9.-]{3,63}$   
+  SNSTopicName:
+    Type: String
+    Description: "Provide a name for your SNS Topic."
+  SNSEndpoint:
+    Type: String
+    Description: "Provide a valid email to subscribe to your SNS topic."
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref S3BucketName
+      VersioningConfiguration:
+        Status: Enabled
+  SNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Ref SNSTopicName
+      Subscription:
+        - Endpoint: !Ref SNSEndpoint #provide a valid email.
+          Protocol: email
+
