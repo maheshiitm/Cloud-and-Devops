@@ -1,0 +1,10 @@
+No1: IAM Hands On Lab
+https://catalog.workshops.aws/general-immersionday/en-US/basic-modules/30-iam/iam/1-iam
+
+No 2: IAM Hands On Lab (Hint: Solve the challenge to correct the policies
+Sol: Issue is with the format of JSON statement)
+https://catalog.us-east-1.prod.workshops.aws/workshops/8efd4edb-2b91-49fd-b1b8-3e3b5e71aa03/en-US/iam/iam
+
+Cloudwatch Alarm State change CLI command
+aws cloudwatch set-alarm-state --alarm-name "demo-alarm" --state-value ALARM --state-reason "testing purpose"
+

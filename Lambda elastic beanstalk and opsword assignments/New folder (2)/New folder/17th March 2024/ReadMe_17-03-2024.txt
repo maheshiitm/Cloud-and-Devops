@@ -1,0 +1,36 @@
+DNS Concepts
+https://aws.amazon.com/route53/what-is-dns/#:~:text=DNS%2C%20or%20the%20Domain%20Name,2.44).
+
+Transferring a domain name to Route53
+https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html
+
+Mapping an existing domain name to free hosted zone
+To map an existing domain name to a free hosted zone in Route 53, here are the basic steps:
+
+1. Create a hosted zone in Route 53 for your domain. This will be the authoritative DNS for your domain.
+
+2. Update the name server (NS) records for your domain at its current registrar to point to the name servers of the new hosted zone in Route 53.
+
+3. Create appropriate DNS records like A, AAAA, CNAME etc. in the new hosted zone to route traffic to your websites, applications or other AWS resources.
+
+4. Set a low TTL like 300 seconds for the NS records to ensure changes propagate quickly.
+
+5. Monitor your domain for the next 48 hours to ensure all DNS changes have propagated properly before making any other configuration changes.
+
+6. Optionally, you can transfer the registration of your domain from its current registrar to Route 53 as well.
+
+7.Some things to keep in mind are to not delete or modify the SOA record, avoid creating additional NS records
+
+Difference between JSON vs YAML
+https://aws.amazon.com/compare/the-difference-between-yaml-and-json/
+
+Labs
+Create VPC and its configuration using cloudformation
+https://catalog.us-east-1.prod.workshops.aws/workshops/f3a3e2bd-e1d5-49de-b8e6-dac361842e76/en-US/basic-modules/800-cfn/810-cfn-lab1-vpc/1-createvpc
+
+
+Launch ec2 instance using CloudFormation
+https://catalog.us-east-1.prod.workshops.aws/workshops/f3a3e2bd-e1d5-49de-b8e6-dac361842e76/en-US/basic-modules/800-cfn/820-cfn-lab2-ec2/1-launchec2
+
+
+
